@@ -1,0 +1,187 @@
+---
+layout: layouts/standalone.njk
+title: About the Rent vs. Buy Calculator
+aboutUrl: /RentVsBuy.html
+aboutLabel: Back to calculator
+---
+<style>
+    :root {
+        --accent-blue: #83b0d6;
+        --accent-green: #00cc96;
+        --accent-red-light: #ec6c5b;
+    }
+    body { background-color: #696969; color: white; }
+    .main-content { max-width: 960px; margin: 0 auto; padding: 40px 24px 60px; }
+    .main-content h1 { color: var(--accent-blue); font-size: 28px; margin-bottom: 4px; }
+    .main-content .subtitle { opacity: 0.7; margin-top: 0; font-size: 14px; }
+    .about-section { margin: 40px 0; }
+    .about-section h2 { color: var(--accent-blue); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px; margin-top: 40px; }
+    .about-section p { margin: 12px 0; }
+    .about-section ul { line-height: 1.8; }
+    .about-section code { background: rgba(0,0,0,0.25); padding: 2px 6px; border-radius: 3px; font-family: 'Consolas','Monaco',monospace; font-size: 0.9em; color: var(--accent-blue); }
+    .arch-diagram { background: rgba(0,0,0,0.2); padding: 24px; border-radius: 6px; margin: 20px 0; }
+    .arch-svg { width: 100%; max-width: 820px; height: auto; display: block; margin: 0 auto; }
+    .arch-svg text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .arch-svg .edge-label { font-size: 11px; fill: #fff; opacity: 0.9; }
+    .diagram-caption { text-align: center; font-size: 12px; font-style: italic; opacity: 0.85; margin: 14px auto 0; max-width: 640px; }
+    .stack-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    .stack-table th, .stack-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.15); }
+    .stack-table th { background: rgba(0,0,0,0.25); color: var(--accent-blue); font-size: 14px; }
+    .stack-table tr:hover { background: rgba(255,255,255,0.04); }
+    .stack-table td:first-child { font-weight: bold; white-space: nowrap; }
+    .flow-steps { list-style: none; padding: 0; counter-reset: step; }
+    .flow-steps li { counter-increment: step; padding: 12px 12px 12px 50px; margin: 10px 0; background: rgba(0,0,0,0.15); border-left: 3px solid var(--accent-blue); border-radius: 4px; position: relative; }
+    .flow-steps li::before { content: counter(step); position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 28px; height: 28px; border-radius: 50%; background: var(--accent-blue); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
+    .legend { display: flex; justify-content: center; gap: 20px; font-size: 12px; margin-top: 8px; flex-wrap: wrap; opacity: 0.85; }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid; }
+</style>
+<div class="main-content">
+    <h1>About the Rent vs. Buy Calculator</h1>
+    <p class="subtitle">Should you buy, or keep renting and invest the difference? A side-by-side net-worth projection.</p>
+
+    <div class="about-section">
+        <h2>What This Is</h2>
+        <p>
+            Enter a home price, your down payment, the mortgage rate, and what you would otherwise
+            pay in rent. The calculator tells you whether buying or renting-and-investing leaves you
+            with more money, and the year buying pulls ahead. It assumes both paths put the same cash
+            in on the same schedule (your down payment up front, then the difference between owning
+            and renting each month); the only thing that differs is where the money ends up: home
+            equity for the buyer, an investment portfolio for the renter.
+        </p>
+        <p>
+            Under the hood it runs a full month-by-month mortgage and a 35-year projection of home
+            value, property tax, insurance, maintenance, the mortgage-interest and SALT tax benefit,
+            and the after-tax return a renter would earn on the same money. Everything runs in your
+            browser. Nothing is typed, stored, or sent anywhere.
+        </p>
+    </div>
+
+    <div class="about-section">
+        <h2>Architecture at a Glance</h2>
+        <div class="arch-diagram">
+            <svg class="arch-svg" viewBox="0 0 840 430" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Data flow: your inputs are resolved and passed to a calculation engine, which returns a 35-year projection that is rendered into the summary, chart, and tables. Everything runs in the browser.">
+                <defs>
+                    <marker id="arrow" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto-start-reverse" markerUnits="strokeWidth">
+                        <path d="M0,0 L10,5 L0,10 Z" fill="#83B0D6" />
+                    </marker>
+                </defs>
+
+                <!-- Edges -->
+                <line x1="420" y1="92" x2="420" y2="158" stroke="#83B0D6" stroke-width="2" marker-end="url(#arrow)" />
+                <text class="edge-label" x="430" y="128">1. resolved inputs</text>
+
+                <line x1="420" y1="252" x2="420" y2="318" stroke="#83B0D6" stroke-width="2" marker-end="url(#arrow)" />
+                <text class="edge-label" x="430" y="288">2. 35-year projection</text>
+
+                <!-- Inputs (client / green) -->
+                <g>
+                    <rect x="340" y="30" width="160" height="60" rx="6" fill="#00CC96" fill-opacity="0.15" stroke="#00CC96" stroke-width="1.5" />
+                    <text x="420" y="56" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle">Your inputs</text>
+                    <text x="420" y="75" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">~20 fields, $ / % toggles</text>
+                </g>
+
+                <!-- computeModel (compute / red) -->
+                <g>
+                    <rect x="320" y="160" width="200" height="90" rx="6" fill="#DE3B3E" fill-opacity="0.18" stroke="#EC6C5B" stroke-width="1.5" />
+                    <text x="420" y="190" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle">computeModel()</text>
+                    <text x="420" y="210" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">360-month amortization,</text>
+                    <text x="420" y="226" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">35-year cash flow, tax,</text>
+                    <text x="420" y="242" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">net worth + IRR per side</text>
+                </g>
+
+                <!-- Results (client / green) -->
+                <g>
+                    <rect x="300" y="320" width="240" height="70" rx="6" fill="#00CC96" fill-opacity="0.15" stroke="#00CC96" stroke-width="1.5" />
+                    <text x="420" y="350" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle">Live results</text>
+                    <text x="420" y="369" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">summary cards, net-worth chart,</text>
+                    <text x="420" y="385" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">cash-flow &amp; amortization tables</text>
+                </g>
+            </svg>
+        </div>
+        <div class="legend">
+            <span class="legend-item"><span class="legend-swatch" style="background:rgba(0,204,150,0.15);border-color:var(--accent-green);"></span> Browser (UI)</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:rgba(222,59,62,0.18);border-color:var(--accent-red-light);"></span> Calculation engine</span>
+        </div>
+        <p class="diagram-caption">Single-headed arrows show one-way data flow. The numbers match the steps below. Every box runs in the same browser tab; there is no server.</p>
+    </div>
+
+    <div class="about-section">
+        <h2>What Happens When You Change an Input</h2>
+        <ol class="flow-steps">
+            <li>
+                The component reads every field and resolves the <code>$</code> / <code>%</code>
+                toggles into consistent numbers (a percent entry becomes a fraction of the purchase
+                price), then passes those resolved inputs to the model.
+            </li>
+            <li>
+                <code>computeModel()</code> builds a 360-month amortization schedule: each month's
+                interest is the balance times the monthly rate, the rest of the payment pays down
+                principal, and any extra monthly payment shortens the loan.
+            </li>
+            <li>
+                It walks 35 years forward: the home appreciates, carrying costs and the equivalent
+                rent compound, the mortgage-interest and property-tax write-off (property tax limited
+                by the SALT cap, measured against the standard deduction) becomes a tax saving, and a
+                renter invests the identical cash at the expected return.
+            </li>
+            <li>
+                It derives each side's net worth, money-weighted return (IRR), and the break-even
+                year, then hands the 35-year projection back to the page, which redraws the summary
+                cards, the net-worth chart, and the two detail tables together.
+            </li>
+        </ol>
+    </div>
+
+    <div class="about-section">
+        <h2>Where the Computation Happens</h2>
+        <p>
+            All of it happens client-side, in one JavaScript file. There is no API call, no database,
+            and no build step beyond copying the file into the site. The model is plain arithmetic
+            (an Excel-equivalent <code>PMT</code>, an amortization loop, annual compounding, and a
+            bisection solver for the IRR), so a full recompute on every keystroke takes well under a
+            millisecond. The result is that the chart, the verdict, and both tables update instantly
+            as you drag a slider or flip a toggle.
+        </p>
+    </div>
+
+    <div class="about-section">
+        <h2>Tech Stack</h2>
+        <table class="stack-table">
+            <thead>
+                <tr><th>Layer</th><th>Tools</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Component</td><td>One vanilla <code>&lt;rent-vs-buy&gt;</code> custom element (Web Components, Shadow DOM); no framework</td></tr>
+                <tr><td>Math</td><td>Plain JavaScript: Excel-equivalent <code>PMT</code>, amortization, compounding, and a bisection IRR solver</td></tr>
+                <tr><td>Chart</td><td>HTML5 Canvas, hand-drawn (no charting library)</td></tr>
+                <tr><td>Hosting</td><td>Static files on an <a href="https://www.11ty.dev/" target="_blank" rel="noopener">Eleventy</a> site; no backend, near-zero cost</td></tr>
+                <tr><td>Origin</td><td>Ported from a macro-enabled Excel workbook and verified against the workbook's own computed values</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="about-section">
+        <h2>Who This Is For</h2>
+        <p>
+            This is built for one person: someone renting their primary residence who is weighing
+            buying a home to live in as an economic alternative. It is not a tool for high-income
+            earners with complex tax situations, and it is not for investment or rental property (no
+            rental income, depreciation, or passive-activity rules are modeled). A few deliberate
+            simplifications follow from that scope: the high-income SALT phase-out is not modeled
+            (lower the SALT input by hand to approximate it), interest on the full loan is treated as
+            deductible (federal rules cap this at the first $750,000 of debt), and the home sale is
+            assumed tax-free under the primary-residence exclusion while the renter's investment
+            gains are taxed. Treat the break-even year as a directional signal, not a guarantee.
+        </p>
+    </div>
+
+    <div class="about-section">
+        <h2>Source Code</h2>
+        <p>
+            The entire calculator (model and UI) lives in a single file:
+            <a href="https://github.com/JackVance/rent-vs-buy-calculator/blob/main/src/rent-vs-buy.js" target="_blank" rel="noopener">github.com/JackVance/rent-vs-buy-calculator/blob/main/src/rent-vs-buy.js</a>
+        </p>
+    </div>
+</div>
