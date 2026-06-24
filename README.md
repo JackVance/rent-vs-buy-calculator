@@ -4,6 +4,10 @@ A self-contained `<rent-vs-buy>` web component that ports the
 `reference/RealEstate_Calculator_Macro.xlsm` model to the browser. No backend,
 no build step, no dependencies.
 
+![Rent vs. Buy Calculator](docs/screenshot.png)
+
+Live on [bigolbuffalo.com/RentVsBuy.html](https://bigolbuffalo.com/RentVsBuy.html).
+
 ## Files
 
 | File | Purpose |
