@@ -217,6 +217,11 @@ export function defineRentVsBuy() {
     --rvb-accent:#2f6f4f; --rvb-accent-2:#b8472d; --rvb-bg:#fff; --rvb-fg:#1c1c1c;
     --rvb-muted:#666; --rvb-line:#e3e3e3; --rvb-soft:#f6f6f4; --rvb-pos:#2f6f4f; --rvb-neg:#b8472d;
     --rvb-buy:#2f6fb0; --rvb-rent:#c0392b;
+    /* Text/labels that sit directly on the host page background (not inside a
+       panel). Default to the in-panel colors so a white host is unaffected; a
+       dark host can override these to stay legible. */
+    --rvb-on-bg:var(--rvb-fg); --rvb-buy-label:var(--rvb-buy); --rvb-rent-label:var(--rvb-rent);
+    --rvb-slider:var(--rvb-accent);
     display:block; color:var(--rvb-fg);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     line-height:1.45; container-type:inline-size;
@@ -257,8 +262,8 @@ export function defineRentVsBuy() {
   @container (max-width:620px){ .cmp{grid-template-columns:1fr} }
   .cmp-col .cards-row{grid-template-columns:repeat(3,1fr)}
   .subhead{font-size:.72rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em; margin:0 0 7px; padding-bottom:4px; border-bottom:2px solid}
-  .subhead.buyer{color:var(--rvb-buy); border-color:var(--rvb-buy)}
-  .subhead.renter{color:var(--rvb-rent); border-color:var(--rvb-rent)}
+  .subhead.buyer{color:var(--rvb-buy-label); border-color:var(--rvb-buy-label)}
+  .subhead.renter{color:var(--rvb-rent-label); border-color:var(--rvb-rent-label)}
   .advantage{margin-top:14px; padding:11px 15px; border-radius:10px; text-align:center; font-size:1rem; border:1px solid var(--rvb-line)}
   .advantage.pos{background:#eef5ee; color:var(--rvb-pos)}
   .advantage.neg{background:#f7ece9; color:var(--rvb-neg)}
@@ -266,11 +271,11 @@ export function defineRentVsBuy() {
   .pos{color:var(--rvb-pos)} .neg{color:var(--rvb-neg)}
   .verdict{border-radius:12px; padding:14px 16px; margin-bottom:16px; font-size:1.02rem; border:1px solid var(--rvb-line); background:var(--rvb-soft)}
   .verdict b{font-weight:700}
-  .horizon{display:flex; align-items:center; gap:12px; margin:6px 0 18px}
-  .horizon input[type=range]{flex:1; accent-color:var(--rvb-accent)}
+  .horizon{display:flex; align-items:center; gap:12px; margin:6px 0 18px; color:var(--rvb-on-bg)}
+  .horizon input[type=range]{flex:1; accent-color:var(--rvb-slider)}
   .horizon .yv{font-weight:650; min-width:64px}
   canvas{width:100%; height:280px; display:block}
-  .chartwrap{border:1px solid var(--rvb-line); border-radius:12px; padding:14px; margin-bottom:18px}
+  .chartwrap{background:var(--rvb-bg); border:1px solid var(--rvb-line); border-radius:12px; padding:14px; margin-bottom:18px}
   .legend{display:flex; gap:16px; flex-wrap:wrap; font-size:.78rem; color:var(--rvb-muted); margin-top:8px}
   .legend span{display:inline-flex; align-items:center; gap:6px}
   .swatch{width:11px; height:11px; border-radius:3px; display:inline-block}
@@ -285,7 +290,7 @@ export function defineRentVsBuy() {
   th{position:sticky; top:0; background:#fff; color:var(--rvb-muted); font-weight:600; text-align:right; z-index:1}
   th:first-child,td:first-child{text-align:left}
   tbody tr:hover{background:var(--rvb-soft)}
-  .note{font-size:.74rem; color:var(--rvb-muted); margin:2px 0 0}
+  .note{font-size:.74rem; color:var(--rvb-on-bg); margin:2px 0 0}
   .check{width:17px; height:17px; accent-color:var(--rvb-accent); cursor:pointer; margin:0 6px 0 0}
   .breakeven-row{background:#eef5ee !important}
 </style>
