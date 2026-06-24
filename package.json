@@ -1,0 +1,14 @@
+{
+  "name": "rent-vs-buy-calculator",
+  "version": "1.0.0",
+  "description": "Self-contained <rent-vs-buy> web component porting RealEstate_Calculator_Macro.xlsm to the browser. No backend, no build step, no dependencies.",
+  "type": "module",
+  "scripts": {
+    "test": "node test/verify.mjs && node test/smoke.mjs",
+    "serve": "node scripts/serve.mjs"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "jsdom": "^29.1.1"
+  }
+}
